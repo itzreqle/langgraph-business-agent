@@ -5,6 +5,7 @@ from agent.graph import run_agent
 
 class TestBusinessAgent(unittest.TestCase):
     def test_profit_and_sales_growth(self):
+        """Test profit calculation and sales growth recommendation."""
         input_data = {
             "today": {"sales": 1000, "costs": 800, "customers": 50},
             "yesterday": {"sales": 900, "costs": 750, "customers": 45}
@@ -15,6 +16,7 @@ class TestBusinessAgent(unittest.TestCase):
         self.assertIn("Consider increasing advertising budget due to 11.11% sales growth", result["recommendations"])
 
     def test_loss_scenario(self):
+        """Test loss scenario and cost reduction recommendation."""
         input_data = {
             "today": {"sales": 700, "costs": 800, "customers": 50},
             "yesterday": {"sales": 900, "costs": 750, "customers": 45}
@@ -25,6 +27,7 @@ class TestBusinessAgent(unittest.TestCase):
         self.assertIn("Reduce costs to improve profitability", result["recommendations"])
 
     def test_cac_increase(self):
+        """Test CAC increase detection and marketing review recommendation."""
         input_data = {
             "today": {"sales": 1000, "costs": 800, "customers": 40},
             "yesterday": {"sales": 900, "costs": 750, "customers": 50}
@@ -36,6 +39,7 @@ class TestBusinessAgent(unittest.TestCase):
         self.assertIn("Consider increasing advertising budget due to 11.11% sales growth", result["recommendations"])
 
     def test_invalid_input(self):
+        """Test handling of invalid input data."""
         input_data = {}
         with self.assertRaises(ValueError):
             run_agent(input_data)

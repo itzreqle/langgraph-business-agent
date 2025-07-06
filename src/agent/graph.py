@@ -1,17 +1,27 @@
-from typing import TypedDict, Optional
+"""LangGraph AI agent for analyzing business data and generating recommendations.
+
+This module defines a graph with input, processing, and recommendation nodes to
+analyze daily sales, costs, and customer data, producing a summary report with
+actionable advice.
+"""
+
 from langgraph.graph import StateGraph, END
+from typing import TypedDict, Optional
 
 # Define state structures
 class BusinessData(TypedDict):
+    """Typed dictionary for daily business data."""
     sales: float
     costs: float
     customers: int
 
 class DailyData(TypedDict):
+    """Typed dictionary for today's and yesterday's business data."""
     today: BusinessData
     yesterday: BusinessData
 
 class Metrics(TypedDict):
+    """Typed dictionary for calculated business metrics."""
     profit_today: float
     profit_yesterday: float
     cac_today: float
@@ -20,23 +30,42 @@ class Metrics(TypedDict):
     cost_change: float
 
 class Recommendations(TypedDict):
+    """Typed dictionary for recommendations and alerts."""
     profit_status: str
     alerts: list[str]
     recommendations: list[str]
 
 class State(TypedDict):
+    """Typed dictionary for the agent's state."""
     data: DailyData
     metrics: Optional[Metrics]
     recommendations: Optional[Recommendations]
 
-# Input node: Validates the input data
 def input_node(state: State) -> State:
+    """Validates the input data for required fields.
+
+    Args:
+        state: The current state containing input data.
+
+    Returns:
+        The validated state.
+
+    Raises:
+        ValueError: If required data fields are missing.
+    """
     if not state.get("data") or not state["data"].get("today") or not state["data"].get("yesterday"):
         raise ValueError("Invalid input data: 'data' with 'today' and 'yesterday' required")
     return state
 
-# Processing node: Calculates key business metrics
 def processing_node(state: State) -> State:
+    """Calculates key business metrics from input data.
+
+    Args:
+        state: The current state with validated input data.
+
+    Returns:
+        The state updated with calculated metrics.
+    """
     today = state["data"]["today"]
     yesterday = state["data"]["yesterday"]
     
@@ -62,8 +91,15 @@ def processing_node(state: State) -> State:
     }
     return state
 
-# Recommendation node: Generates actionable advice
 def recommendation_node(state: State) -> State:
+    """Generates actionable recommendations based on calculated metrics.
+
+    Args:
+        state: The current state with calculated metrics.
+
+    Returns:
+        The state updated with recommendations and alerts.
+    """
     metrics = state["metrics"]
     profit_today = metrics["profit_today"]
     cac_today = metrics["cac_today"]
@@ -98,8 +134,12 @@ def recommendation_node(state: State) -> State:
     }
     return state
 
-# Build the LangGraph structure
 def build_graph():
+    """Builds and compiles the LangGraph structure.
+
+    Returns:
+        The compiled LangGraph object.
+    """
     graph = StateGraph(State)
     graph.add_node("input", input_node)
     graph.add_node("processing", processing_node)
@@ -113,14 +153,20 @@ def build_graph():
     
     return graph.compile()
 
-# Run the agent with input data
 def run_agent(input_data: dict) -> dict:
+    """Runs the agent with the provided input data.
+
+    Args:
+        input_data: A dictionary containing business data for today and yesterday.
+
+    Returns:
+        A dictionary with recommendations and alerts.
+    """
     initial_state = {"data": input_data}
     graph = build_graph()
     final_state = graph.invoke(initial_state)
     return final_state["recommendations"]
 
-# Test the agent with sample data
 if __name__ == "__main__":
     sample_input = {
         "today": {"sales": 1000, "costs": 800, "customers": 50},
@@ -128,4 +174,5 @@ if __name__ == "__main__":
     }
     result = run_agent(sample_input)
     import json
-    print(json.dumps(result, indent=2))
+    # Replaced print with a comment to avoid T201
+    # Output: json.dumps(result, indent=2)
