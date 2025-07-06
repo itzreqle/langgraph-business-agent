@@ -42,7 +42,7 @@ class State(TypedDict):
     recommendations: Optional[Recommendations]
 
 def input_node(state: State) -> State:
-    """Validates the input data for required fields.
+    """Validate the input data for required fields.
 
     Args:
         state: The current state containing input data.
@@ -58,7 +58,7 @@ def input_node(state: State) -> State:
     return state
 
 def processing_node(state: State) -> State:
-    """Calculates key business metrics from input data.
+    """Calculate key business metrics from input data.
 
     Args:
         state: The current state with validated input data.
@@ -92,7 +92,7 @@ def processing_node(state: State) -> State:
     return state
 
 def recommendation_node(state: State) -> State:
-    """Generates actionable recommendations based on calculated metrics.
+    """Generate actionable recommendations based on calculated metrics.
 
     Args:
         state: The current state with calculated metrics.
@@ -135,7 +135,7 @@ def recommendation_node(state: State) -> State:
     return state
 
 def build_graph():
-    """Builds and compiles the LangGraph structure.
+    """Build and compile the LangGraph structure.
 
     Returns:
         The compiled LangGraph object.
@@ -154,7 +154,7 @@ def build_graph():
     return graph.compile()
 
 def run_agent(input_data: dict) -> dict:
-    """Runs the agent with the provided input data.
+    """Run the agent with the provided input data.
 
     Args:
         input_data: A dictionary containing business data for today and yesterday.
@@ -173,6 +173,4 @@ if __name__ == "__main__":
         "yesterday": {"sales": 900, "costs": 750, "customers": 45}
     }
     result = run_agent(sample_input)
-    import json
-    # Replaced print with a comment to avoid T201
     # Output: json.dumps(result, indent=2)
