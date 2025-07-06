@@ -1,5 +1,7 @@
+"""Unit tests for the LangGraph agent's graph functionality."""
+
 import unittest
-from src.agent.graph import run_agent
+from agent.graph import run_agent
 
 class TestBusinessAgent(unittest.TestCase):
     def test_profit_and_sales_growth(self):
