@@ -5,8 +5,8 @@ analyze daily sales, costs, and customer data, producing a summary report with
 actionable advice.
 """
 
-from langgraph.graph import StateGraph, END
 from typing import TypedDict, Optional
+from langgraph.graph import StateGraph, END
 
 # Define state structures
 class BusinessData(TypedDict):
